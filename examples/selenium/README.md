@@ -92,7 +92,7 @@ curl http://localhost:4444
 If you are using Google Container Engine, you can expose your hub via the internet. This is a bad idea for many reasons, but you can do it as follows:
 
 ```console
-kubectl expose rc selenium-hub --name=selenium-hub-external --labels="app=selenium-hub,external=true" --create-external-load-balancer=true
+kubectl expose rc selenium-hub --name=selenium-hub-external --labels="app=selenium-hub,external=true" --type="LoadBalancer"
 ```
 
 Then wait a few minutes, eventually your new `selenium-hub-external` service will be assigned a load balanced IP from gcloud. Once `kubectl get svc selenium-hub-external` shows two IPs, run this snippet.
@@ -204,7 +204,7 @@ You now have 10 Firefox and 10 Chrome nodes, happy Seleniuming!
 Sometimes it is neccessary to check on a hung test. Each pod is running VNC. To check on one of the browser nodes via VNC, it's reccomended that you proxy, since we don't want to expose a service for every pod, and the containers have a weak VNC password. Replace POD_NAME with the name of the pod you want to connect to.
 
 ```console
-kubectl port-forward --pod=POD_NAME 5900:5900
+kubectl port-forward POD_NAME 5900:5900
 ```
 
 Then connect to localhost:5900 with your VNC client using the password "secret"
